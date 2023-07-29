@@ -21,8 +21,12 @@ For those interested in recreating the CrawlerDataPipeline system, a detailed st
 The architecture of CrawlerDataPipeline consists of several interconnected components, facilitating a seamless and efficient workflow:
 
 1. CI/CD Deployment: The Continuous Integration and Continuous Deployment (CI/CD) process is initiated through CodeBuild, which fetches the latest code. The fetched code is containerized into a Docker image and subsequently uploaded to the Elastic Container Registry (ECR) for versioning and storage.
+![image](https://github.com/MinhThieu145/CrawlerDataPipeline/assets/88282475/30d6f5d6-cd16-4641-abc2-fba056687483)
+
 
 2. Daily Task Execution: EventBridge, a serverless event bus, is utilized to trigger a Lambda function on a scheduled basis. This Lambda function orchestrates the process of pulling data and dispatching batch jobs to AWS Batch for execution. Upon completion of the batch job, the results are securely stored in an S3 bucket.
+![image](https://github.com/MinhThieu145/CrawlerDataPipeline/assets/88282475/6fc05b8e-4dd2-4c71-822a-059693e5bb21)
 
 3. High Availability Application: The CrawlerDataPipeline incorporates a two-tier, high availability application to facilitate result visualization. The application is built using Streamlit and is hosted on a public EC2 instance residing within an Auto Scaling Group. An Elastic Load Balancer (ELB) is employed to evenly distribute incoming traffic among multiple EC2 instances, ensuring the system remains resilient and scalable. The EC2 instances securely connect with the S3 bucket using the S3 Gateway, allowing them to retrieve the requested data for display.
+![image](https://github.com/MinhThieu145/CrawlerDataPipeline/assets/88282475/c7f2d4df-a61b-4197-bb6b-225d65c18684)
 
