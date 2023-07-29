@@ -1,43 +1,28 @@
-# CrawlerDataPipeline: Automated Web Crawler Deployment and Data Processing on AWS
+# CrawlerDataPipeline
 
 ## Summary
-CrawlerDataPipeline is a comprehensive project that addresses the challenges of manual web crawler deployment, testing, and updates by providing an automated pipeline for efficient management of web crawlers on AWS resources. The system facilitates simultaneous testing, storage, and deployment of multiple web crawlers, significantly streamlining the entire process.
-
-## Objectives
-The main objectives of CrawlerDataPipeline are as follows:
-1. Develop an automated deployment system for web crawlers on AWS.
-2. Provide a seamless testing environment for web crawlers across various websites.
-3. Implement an efficient data storage mechanism to handle the results obtained from web crawlers.
-4. Utilize containerization to enhance scalability and portability of web crawlers.
-5. Establish a user-friendly interface for accessing and visualizing the web crawler results.
+CrawlerDataPipeline is a comprehensive project that streamlines the process of deploying web crawlers to AWS resources automatically. The motivation behind this project stems from the challenges faced while testing web crawlers on various websites. As the number of web crawlers grew, managing and updating them manually became increasingly cumbersome. To address this issue, CrawlerDataPipeline offers an automated pipeline that facilitates testing, storage, and deployment of multiple web crawlers concurrently.
 
 ## Tools and Technologies
-CrawlerDataPipeline utilizes a powerful set of tools and technologies to achieve its objectives:
-- **AWS Services:** The project leverages various AWS services, including CodeBuild, AWS Batch, S3, Lambda, EventBridge, EC2, ECR, and VPC, to facilitate automated deployment and data processing.
-- **Infrastructure as Code (IaC):** AWS Cloud Development Kit (CDK) is employed to define the cloud resources as code, enabling easier management and version control.
-- **Containerization:** Docker is used to containerize the web crawlers, allowing for seamless deployment and scalability.
-- **Programming Language:** Python is the language of choice for writing the web crawlers and other associated components.
+The CrawlerDataPipeline leverages a combination of powerful tools and cutting-edge technologies to achieve its objectives:
+
+- AWS Services: The project makes use of several AWS services, including CodeBuild for fetching code, AWS Batch for processing batch jobs, S3 for data storage, Lambda for executing functions, EventBridge for scheduling tasks, EC2 for running the application, ECR for container image storage, and VPC for networking.
+
+- Infrastructure as Code (IaC): AWS Cloud Development Kit (CDK) is utilized to define and provision the AWS infrastructure in a programmable manner, enabling easy management and reproducibility.
+
+- Containerization: Docker containers are employed to package the web crawlers and their dependencies, ensuring consistency across different environments.
+
+- Language: The primary language used for implementing the project is Python, known for its versatility and extensive libraries that support web crawling and data processing.
 
 ## Tutorial
-For those interested in setting up the CrawlerDataPipeline, a comprehensive tutorial is available [here](https://s3.console.aws.amazon.com/s3/buckets/awsworkshop1?region=us-east-1&tab=properties). This tutorial guides users through the step-by-step process of building the system, offering clear instructions and explanations for each component.
+For those interested in recreating the CrawlerDataPipeline system, a detailed step-by-step tutorial is available at the following link: [CrawlerDataPipeline Tutorial](https://s3.console.aws.amazon.com/s3/buckets/awsworkshop1?region=us-east-1&tab=properties)
 
 ## Architecture
-CrawlerDataPipeline employs a robust and scalable architecture to ensure efficient deployment and data processing:
+The architecture of CrawlerDataPipeline consists of several interconnected components, facilitating a seamless and efficient workflow:
 
-1. **Continuous Integration and Continuous Deployment (CI/CD):**
-   - Use AWS CodeBuild to fetch the web crawler code from your version control repository (e.g., GitHub).
-   - Define the build specification to install necessary dependencies and prepare the crawler code for containerization.
+1. CI/CD Deployment: The Continuous Integration and Continuous Deployment (CI/CD) process is initiated through CodeBuild, which fetches the latest code. The fetched code is containerized into a Docker image and subsequently uploaded to the Elastic Container Registry (ECR) for versioning and storage.
 
-```yaml
-# buildspec.yml
-version: 0.2
-phases:
-  install:
-    commands:
-      - pip install -r requirements.txt
-  build:
-    commands:
-      - python prepare_crawler.py
-artifacts:
-  files:
-    - crawler_code/
+2. Daily Task Execution: EventBridge, a serverless event bus, is utilized to trigger a Lambda function on a scheduled basis. This Lambda function orchestrates the process of pulling data and dispatching batch jobs to AWS Batch for execution. Upon completion of the batch job, the results are securely stored in an S3 bucket.
+
+3. High Availability Application: The CrawlerDataPipeline incorporates a two-tier, high availability application to facilitate result visualization. The application is built using Streamlit and is hosted on a public EC2 instance residing within an Auto Scaling Group. An Elastic Load Balancer (ELB) is employed to evenly distribute incoming traffic among multiple EC2 instances, ensuring the system remains resilient and scalable. The EC2 instances securely connect with the S3 bucket using the S3 Gateway, allowing them to retrieve the requested data for display.
+
